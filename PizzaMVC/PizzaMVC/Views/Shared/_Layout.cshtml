@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - T&#10084;3Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body style="background-image: url('/images/bb.jpg'); background-repeat : no-repeat; background-size:cover; background-position:center; margin:auto; padding-bottom:20px;">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-transparent">
+            <div class="container">
+                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index"><img style="width: 100px; height: auto;" src='@Url.Content("/images/ll.png")' /></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            @if (Context.Session.GetString("IsCartEmpty") == "false")
+                            {
+                                <a class="nav-link text-light" asp-area="" asp-controller="Order" asp-action="Index">Cart</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-light" asp-area="" data-target='#myalert' data-toggle='modal'>Cart</a>
+                                <div class='modal' id='myalert'>
+                                    <div class='modal-dialog'>
+                                        <div class="alert alert-primary">
+                                            <strong>Cart is Empty!</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </li>
+                    </ul>
+                    @if (Context.Session.GetString("UserEmail") == null)
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        @Html.ActionLink("History", "Index", "History", null, new { @class = "btn text-light" })
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light">Hello, @Context.Session.GetString("UserName")! </a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="@Url.Action("Logout", "User")" method="post">
+                            <input type="submit" class="btn text-light" value="Log Out" />
+                        </form>
+                    </li>
+                </ul>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class=" footer text-muted">
+        <div class="container">
+            &copy; 2021 - PizzaOrderingManagementSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

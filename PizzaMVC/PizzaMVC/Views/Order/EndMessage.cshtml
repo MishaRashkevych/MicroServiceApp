@@ -1,0 +1,34 @@
+﻿@model PizzaMVC.Models.OrderDTO
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Confirm";
+}
+
+<h1 class="text-white-50">Confirm</h1>
+
+@if (Context.Session.GetString("Token") != null)
+{
+    <div style="margin: 0 auto; width: 30rem">
+        <div style="display: flex; justify-content:center">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><h2><b>Congrats! Your order number: </b> @Html.DisplayFor(model => model.Id)</h2></li>
+                    <li class="list-group-item"><b>Our specialist will contact you to clarify the details by phone number: </b> @Html.DisplayFor(model => model.Phone)</li>
+                    <li class="list-group-item"><b>Estimated waiting time for order delivery:</b> 1 hour</li>
+                </ul>
+                <div class="card-body">
+                    <h5 class="card-title text-white-50">Please prepare the amount: @Html.DisplayFor(model => model.Total) $</h5>
+                    <h5 class="card-title text-white-50">Or inform our specialist about cashless payments!</h5>
+                    <div style="display:flex; justify-content:space-between">
+                        <form action="@Url.ActionLink("Index", "Home", new{ confirm = true })" method="post"><input type="submit" class="btn btn-outline-success" value="Let's go!" /></form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h2 class="text-white-50">Please Log In before operating</h2>
+}

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<PizzaMVC.Models.PizzaDTO>
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+}
+<h1 class="text-white-50">NewICons Pizza</h1>
+<hr />
+<div class="pizzaChoice" style="display:flex; justify-content:space-around">
+    @if (Context.Session.GetString("Token") != null)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="card" style="width: 20rem;">
+                <img src="@item.Picture" style="height:15rem" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item" style="padding: .5rem 1.25rem"><b>Crust:</b> @Html.DisplayFor(modelItem => item.Crust)</li>
+                    <li class="list-group-item" style="padding: .5rem 1.25rem"><b>Speciality:</b> @Html.DisplayFor(modelItem => item.Speciality)</li>
+                    @{
+                        if (item.IsVeg)
+                        {
+                            <li class="list-group-item" style="padding: .5rem 1.25rem"><b>Type: </b>Vegan</li>
+                        }
+                        else
+                        {
+                            <li class="list-group-item" style="padding: .5rem 1.25rem"><b>Type: </b>Not Vegan</li>
+                        }
+                    }
+                </ul>
+                <div class="card-body" style="display:flex; justify-content:space-between">
+                    <h4><b>Price:</b> @Html.DisplayFor(modelItem => item.Price)$</h4>
+                    @if (Context.Session.GetString("UserEmail") != null)
+                    {
+                        <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@item.Id">Add to Cart</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-success" data-target='#myalert1' data-toggle='modal'>Add to Cart</a>
+                        <div class='modal' id='myalert1'>
+                            <div class='modal-dialog'>
+                                <div class="alert alert-primary">
+                                    <strong> Please Login or Register!</strong>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h2 class="text-white-50">Please Log In before operating</h2>
+    }
+</div>

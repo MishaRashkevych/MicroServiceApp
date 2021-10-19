@@ -1,0 +1,66 @@
+﻿@model PizzaMVC.Models.CartItem
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1 class="text-white-50">Customize your pizza: @Html.DisplayFor(model => model.Pizza.Name)</h1>
+<hr />
+@if (Context.Session.GetString("Token") != null)
+{
+    <div style="margin: 0 auto;">
+        <div style="display: flex; justify-content:center">
+            <div class="img">
+                <img src="@Model.Pizza.Picture" style="width:25rem;height:25rem" class="card-img" alt="...">
+            </div>
+            <div class="card" style="width:25rem;height:25rem">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Price:</b> @Html.DisplayFor(model => model.Pizza.Price)$</li>
+                    <li class="list-group-item"><b>Crust:</b> @Html.DisplayFor(model => model.Pizza.Crust)</li>
+                    <li class="list-group-item"><b>Speciality:</b> @Html.DisplayFor(model => model.Pizza.Speciality)</li>
+                    @{
+                        if (@Model.Pizza.IsVeg)
+                        {
+                            <li class="list-group-item"><b>Type: </b>Vegan</li>
+                        }
+                        else
+                        {
+                            <li class="list-group-item"><b>Type: </b>Not Vegan</li>
+                        }
+                    }
+                </ul>
+                <div class="card-body">
+                    <h6 class="card-title">Add some toppings?</h6>
+                    @using (Html.BeginForm("Edit", "Home", FormMethod.Post))
+                    {
+                        <table>
+                            @for (int i = 0; i < Model.SelectedToppings.Count(); i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.SelectedToppings[i].Selected)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => m.SelectedToppings[i].Text)
+                                        @Html.HiddenFor(m => m.SelectedToppings[i].Value)
+                                        @Html.HiddenFor(m => m.SelectedToppings[i].Text)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                        <br />
+                        <div style="display:flex; justify-content:space-between">
+                            <input class="btn btn-outline-primary" name="button" type="submit" value="To Cart" />
+                            <input class="btn btn-outline-primary" name="button" type="submit" value="Add more pizza" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h2 class="text-white-50">Please Log In before operating</h2>
+}
